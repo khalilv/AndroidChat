@@ -42,6 +42,7 @@ public class MessageAdapter extends BaseAdapter {
         return i;
     }
 
+    //method to display message in chat screen
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup){
         MessageViewHolder holder = new MessageViewHolder();

@@ -19,10 +19,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //display start screen
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
+        //when start button is pressed go to login page
         startButton = (Button) findViewById(R.id.startButton);
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override

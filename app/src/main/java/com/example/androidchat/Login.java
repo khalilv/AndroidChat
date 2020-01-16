@@ -28,18 +28,19 @@ public class Login extends AppCompatActivity {
     EditText passwordInput;
 
     Button loginButton;
-    private WebSocketClient webSocketClient;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        //display login page
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
-        createWebSocketClient();
 
+        //get username and password input from user
         usernameInput = (EditText) findViewById(R.id.usernameInput);
         passwordInput = (EditText) findViewById(R.id.passwordInput);
 
+        //when login button is pressed get username and password
         loginButton = (Button) findViewById(R.id.loginButton);
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +48,7 @@ public class Login extends AppCompatActivity {
                 username = usernameInput.getText().toString();
                 password = passwordInput.getText().toString();
 
+                //put username in a bundle and sent to chat screen class
                 Intent myIntent = new Intent(v.getContext(), ChatScreen.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("user",username);
@@ -54,79 +56,5 @@ public class Login extends AppCompatActivity {
                 startActivity(myIntent);
             }
         });
-
-    }
-
-    private void createWebSocketClient(){
-        URI uri;
-        try {
-            uri = new URI("ws://BLAH/websocket");
-        }catch (URISyntaxException e){
-            e.printStackTrace();
-            return;
-        }
-
-        webSocketClient = new WebSocketClient(uri) {
-            @Override
-            public void onOpen() {
-                Log.i("WebSocket", "Session is starting");
-                webSocketClient.send("Hello World!");
-            }
-
-            @Override
-            public void onTextReceived(String s) {
-                Log.i("WebSocket", "Message Recieved");
-                final  String message = s;
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            TextView textView = findViewById(R.id.startButton);
-                            textView.setText(message);
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                });
-            }
-
-            @Override
-            public void onBinaryReceived(byte[] data) {
-
-            }
-
-            @Override
-            public void onPingReceived(byte[] data) {
-
-            }
-
-            @Override
-            public void onPongReceived(byte[] data) {
-
-            }
-
-            @Override
-            public void onException(Exception e) {
-                System.out.println(e.getMessage());
-            }
-
-            @Override
-            public void onCloseReceived() {
-                Log.i("Web Socket", "Closed");
-                System.out.println("onCloseRecieved");
-            }
-        };
-        webSocketClient.setConnectTimeout(10000);
-        webSocketClient.setReadTimeout(60000);
-        webSocketClient.enableAutomaticReconnection(5000);
-        webSocketClient.connect();
-    }
-
-    public void sendMessage(View view){
-        Log.i("WebSocket", "Button was Clicked");
-
-        if(view.getId() == R.id.loginButton){
-            webSocketClient.send("1");
-        }
     }
 }
